@@ -1,5 +1,6 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
+import supabase
 from .lecciones import *
 from .cursos import *
 from .usuarios import *
@@ -42,6 +43,18 @@ def new_user():
     print("************* Nuevo usuario creado *****************", data)
     post_user(data)  # Para añadir la data de el nuevo
     return ""
+
+
+@app.route('/login', methods=['POST'])
+def login():
+    email = request.json['email']
+    password = request.json['password']
+
+    # Realiza la autenticación utilizando supabase.auth.signIn() desde el servidor
+    # y devuelve el resultado como respuesta al cliente
+    response = supabase.auth.sign_in(email=email, password=password)
+
+    return jsonify(response)
 
 
 if __name__ == "__main__":
