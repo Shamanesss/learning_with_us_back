@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import supabase
+
+from .supabase_conexion import authenticate
 from .lecciones import *
 from .cursos import *
 from .usuarios import *
@@ -8,7 +10,8 @@ from .tablas import *
 
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+# CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app, resources={r"/*": {"origins": "http://localhost:8080"}})
 
 
 @app.route("/")
@@ -52,9 +55,21 @@ def login():
 
     # Realiza la autenticación utilizando supabase.auth.signIn() desde el servidor
     # y devuelve el resultado como respuesta al cliente
-    response = supabase.auth.sign_in(email=email, password=password)
+    response = authenticate(email, password)
 
     return jsonify(response)
+
+
+@app.route('/register', methods=['POST'])
+def register():
+    email = request.json.get('email')
+
+    # Genera y envía el enlace mágico de autenticación
+    response = supabase.auth.create_magic_link(email)
+    if response.get('error'):
+        return {'success': False, 'message': 'Error en el registro'}
+    else:
+        return {'success': True, 'message': 'Revise su correo para autorizar el registro'}
 
 
 if __name__ == "__main__":
