@@ -4,4 +4,5 @@
 
 flask
 flask_cors
+supabase
 
