@@ -1,23 +1,26 @@
-from flask import Flask, request, jsonify
+from flask import Flask
 from flask_cors import CORS
 
 
 from .querys import *
 
 
-app = Flask(__name__)
-# CORS(app, resources={r"/*": {"origins": "*"}})
-CORS(app)
+def create_app(database):
+    app = Flask(__name__)
+    CORS(app)
 
+    @app.route('/', methods=['GET'])
+    def home():
+        return 'La hechicera del codigo'
 
-# @app.route("/")
-# def admin():
-#     return "La Hechicera del Codigo"
+    @app.route('/cursos', methods=['GET'])
+    def def_get_cursos():
+        return get_cursos()
 
-@app.route('/cursos', methods=['GET'])
-def def_get_cursos():
-    return get_cursos()
-
+    @app.route('/lecciones/<id>', methods=['GET'])
+    def def_get_listado(id):
+        return get_listado(id)
+    return app
 # # Routas para el POST
 
 
@@ -70,10 +73,6 @@ def def_get_cursos():
 #         return {'success': False, 'message': 'Error en el registro'}
 #     else:
 #         return {'success': True, 'message': 'Revise su correo para autorizar el registro'}
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
 
 """
