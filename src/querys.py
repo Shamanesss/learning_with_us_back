@@ -65,7 +65,7 @@ def get_listado(id):
     print("Cursor creado")  # Mensaje de depuración
 
     cursor.execute(
-        "SELECT cursos.titulo as titulo, lecciones.titulo  as listado, cursos.idcursos as idcursos, lecciones.idlecciones as idlecciones FROM cursos INNER JOIN lecciones on cursos.idcursos = lecciones.idcursos WHERE lecciones.idlecciones= %s", (id))
+        "SELECT cursos.titulo as titulo, lecciones.titulo  as listado, cursos.idcursos as idcursos, lecciones.idlecciones as idlecciones FROM cursos INNER JOIN lecciones ON cursos.idcursos = lecciones.idcursos WHERE lecciones.idcursos = %s", (id,))
     print("Consulta ejecutada")  # Mensaje de depuración
 
     indices = cursor.fetchall()
