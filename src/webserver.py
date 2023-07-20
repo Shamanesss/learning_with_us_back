@@ -20,6 +20,11 @@ def create_app(database):
     @app.route('/lecciones/<id>', methods=['GET'])
     def def_get_listado(id):
         return get_listado(id)
+
+    @app.route('/leccion/<idleccion>', methods=['GET'])
+    def def_get_leccion(idleccion):
+        return get_leccion(idleccion)
+
     return app
 # # Routas para el POST
 

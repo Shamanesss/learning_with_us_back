@@ -11,30 +11,16 @@ def init_db(database):
     database_path = database
 
 
-# def get_cursos():
-#     try:
-#         con = db.conexionBBDD()
-#         cursor = con.cursor()
-#         cursor.execute("SELECT * FROM cursos")
-#         cursos = cursor.fetchall()
-#         print(cursos)
-#         con.commit()
-#     except Exception as e:
-#         print("Error:", str(e))
-#     finally:
-#         if con:
-#             con.close()
-
-
+# ----- Metodo get de todo los cursos ---
 def get_cursos():
     con = db.conexionBBDD()
-    print("Conexión establecida")  # Mensaje de depuración
+    print("Conexión establecida")
 
     cursor = con.cursor()
-    print("Cursor creado")  # Mensaje de depuración
+    print("Cursor creado")
 
     cursor.execute("SELECT * FROM cursos")
-    print("Consulta ejecutada")  # Mensaje de depuración
+    print("Consulta ejecutada")
 
     cursos = cursor.fetchall()
 
@@ -53,20 +39,22 @@ def get_cursos():
     print(cursos)
     con.commit()
     con.close()
-    print("Conexión cerrada")  # Mensaje de depuración
+    print("Conexión cerrada")
     return lista_cursos
+
+# ---consulta a la BBDD que junte dos tablas y que nos de el titulo de la curso y id y el titulo de  lecciones y el id de lecciones-------------------------
 
 
 def get_listado(id):
     con = db.conexionBBDD()
-    print("Conexión establecida")  # Mensaje de depuración
+    print("Conexión establecida")
 
     cursor = con.cursor()
-    print("Cursor creado")  # Mensaje de depuración
+    print("Cursor creado")
 
     cursor.execute(
         "SELECT cursos.titulo as titulo, lecciones.titulo  as listado, cursos.idcursos as idcursos, lecciones.idlecciones as idlecciones FROM cursos INNER JOIN lecciones ON cursos.idcursos = lecciones.idcursos WHERE lecciones.idcursos = %s", (id,))
-    print("Consulta ejecutada")  # Mensaje de depuración
+    print("Consulta ejecutada")
 
     indices = cursor.fetchall()
 
@@ -80,5 +68,34 @@ def get_listado(id):
         listado.append(indice)
     con.commit()
     con.close()
-    print("Conexión cerrada")  # Mensaje de depuración
+    print("Conexión cerrada")
     return listado
+
+# --conseguir cada leccion
+
+
+def get_leccion(idleccion):
+    con = db.conexionBBDD()
+    print("Conexión establecida")
+
+    cursor = con.cursor()
+    print("Cursor creado")
+
+    cursor.execute(
+        "SELECT * FROM lecciones WHERE idlecciones = %s", (idleccion,))
+    print("Consulta ejecutada")
+
+    leccion = cursor.fetchone()
+
+    leccion_individual = {
+        "idleccion": leccion[0],
+        "created_at": leccion[1],
+        "idcursos": leccion[2],
+        "titulo": leccion[3],
+        "contenido": leccion[4]
+    }
+
+    con.commit()
+    con.close()
+    print("Conexión cerrada")
+    return leccion_individual
