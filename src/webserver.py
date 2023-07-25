@@ -7,7 +7,7 @@ from .querys import *
 
 def create_app(database):
     app = Flask(__name__)
-    CORS(app)
+    CORS(app, resources={r"/*": {"origins": "*"}})
 
     @app.route('/', methods=['GET'])
     def home():
